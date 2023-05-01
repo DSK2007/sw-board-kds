@@ -55,7 +55,7 @@ public class MemberController {
         model.addAttribute("member", Member.builder().build());
         return "/members/register";
     }
-    @PostMapping("/")
+    @PostMapping("/register")
     public String createMember(@ModelAttribute("member") Member member, Model model) { // 등록 처리 -> service -> repository -> service -> controller
         if(memberService.create(member) > 0 ) // 정상적으로 레코드의 변화가 발생하는 경우 영향받는 레코드 수를 반환
             return "redirect:/";

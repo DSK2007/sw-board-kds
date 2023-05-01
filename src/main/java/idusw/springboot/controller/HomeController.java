@@ -15,4 +15,9 @@ public class HomeController {
     public String goHome() {
         return "/main/index";
     }
+
+    @GetMapping("/errors/404")
+    public String goError() {
+        return "/errors/404";
+    }
 }

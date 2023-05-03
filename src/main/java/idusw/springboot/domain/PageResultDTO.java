@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class PageResultDTO<DTO, EN> {
-    private List<DTO> dtoList;
+    private List<DTO> dtoList; // DTO : Member, Board 객체
 
     private int totalPage; // 총 페이지 번호
     private int curPage; // 현재 페이지 번호

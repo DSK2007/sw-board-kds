@@ -29,7 +29,7 @@ public class MemberController {
         PageResultDTO<Member, MemberEntity> resultDTO = memberService.getList(pageRequestDTO);
         if(resultDTO != null ) {
             model.addAttribute("list", resultDTO.getDtoList()); // record
-            model.addAttribute("pageList", resultDTO.getPageList()); // page number list
+            model.addAttribute("result", resultDTO); // page number list
             return "/members/list"; // view : template engine - thymeleaf .html
         }
         else

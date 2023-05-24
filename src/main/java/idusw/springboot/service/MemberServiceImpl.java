@@ -138,6 +138,11 @@ public class MemberServiceImpl implements MemberService {
         }
         String keyword = pageRequestDTO.getKeyword();
         BooleanBuilder conditionBuilder = new BooleanBuilder();
+        // select * from member where
+        // seq > 0
+        // email=keyword or name=keyword
+        // seq > 0 and email=keyword or name=keyword
+        // select * from member where seq > 0 and email=keyword or name=keyword
         if(type.contains("e")) {
             conditionBuilder.or(qMemberEntity.email.contains(keyword));
         }

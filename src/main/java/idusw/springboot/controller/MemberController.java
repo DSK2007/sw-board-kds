@@ -28,9 +28,9 @@ public class MemberController {
     // public String listMemberPagination(@PathVariable("pn") int pn, @PathVariable("size") int size, Model model)
     @GetMapping(value = {"", "/"}) // ?page=&perPage=, 주의: 다른 메소드가 이런 링크를 가져서는 안됨. 있을 시 주석으로 만들 것.
     public String listMemberPagination(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                       @RequestParam(value = "perPage", required = false, defaultValue = "10") int perPage,
-                                       @RequestParam(value = "perPagination", required = false, defaultValue = "5") int perPagination,
-                                       @RequestParam(value="type", required = false, defaultValue = "0") String type,
+                                       @RequestParam(value = "per-Page", required = false, defaultValue = "10") int perPage,
+                                       @RequestParam(value = "per-Pagination", required = false, defaultValue = "5") int perPagination,
+                                       @RequestParam(value = "type", required = false, defaultValue = "0") String type,
                                        @RequestParam(value = "keyword", required = false, defaultValue = "" + "@") String keyword,
                                        Model model) {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
@@ -84,6 +84,7 @@ public class MemberController {
     }
      */
 
+    /*
     @GetMapping("/list")
     public String listMember2(Model model) {
         List<Member> result = null;
@@ -94,6 +95,7 @@ public class MemberController {
         else
             return "/errors/404";
     }
+     */
     @GetMapping("/register-form")
     public String getRegisterForm(Model model) { // form 요청 -> view (template engine)
         model.addAttribute("member", Member.builder().build());

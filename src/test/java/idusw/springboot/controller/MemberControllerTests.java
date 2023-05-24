@@ -75,7 +75,12 @@ public class MemberControllerTests {
 
     @Test
     public void testPageList() {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(10).perPage(3).build();
+        PageRequestDTO pageRequestDTO = PageRequestDTO
+                .builder()
+                .page(13)
+                .perPage(5)
+                .perPagination(5)
+                .build();
         PageResultDTO<Member, MemberEntity> resultDTO = memberService.getList(pageRequestDTO);
         // print records in page
         /*
@@ -91,9 +96,10 @@ public class MemberControllerTests {
         System.out.println("Prev : " + resultDTO.isPrev());
         System.out.println("Next : " + resultDTO.isNext());
         System.out.println("Total Page : " + resultDTO.getTotalPage());
-        resultDTO.getPageList().forEach(i -> System.out.println(i)); // 람다식
+        // resultDTO.getPageList().forEach(i -> System.out.println(i));
+        // 람다식: ->, 함수형 인터페이스, Method Chaining 방식
 
         for(Integer i : resultDTO.getPageList())
-            System.out.println(i);
+            System.out.format("%3d", i);
     }
 }

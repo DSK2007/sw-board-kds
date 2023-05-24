@@ -190,14 +190,18 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                    <!--
                                         <tr th:each="member : ${list}">
-                                            <td>[[${member.seq}]]</td>
-                                            <td>[[${member.email}]]</td>
-                                            <td>[[${member.name}]]</td>
-                                            <td>[[${member.pw}]]</td>
-                                            <td>[[${member.regDate}]]</td>
-                                            <td>[[${member.modDate}]]</td>
-                                        </tr>
+                                    -->
+                                    <!-- model 객체에 애트리뷰트로 설정된 PageResultDTO 객체의 getDtoList() 호출 -->
+                                    <tr th:each="member : ${result.dtoList}">
+                                        <td>[[${member.seq}]]</td>
+                                        <td>[[${member.email}]]</td>
+                                        <td>[[${member.name}]]</td>
+                                        <td>[[${member.pw}]]</td>
+                                        <td>[[${member.regDate}]]</td>
+                                        <td>[[${member.modDate}]]</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

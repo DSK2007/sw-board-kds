@@ -7,6 +7,7 @@ import idusw.springboot.entity.MemberEntity;
 import idusw.springboot.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.Builder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +24,25 @@ public class MemberController {
     }
     HttpSession session = null;
 
-    @GetMapping("/list/{pn}/{size}")
-    public String listMemberPagination(@PathVariable("pn") int pn, @PathVariable("size") int size, Model model) {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(pn).size(size).build();
+    // @GetMapping("/list/{pn}/{size}")
+    // public String listMemberPagination(@PathVariable("pn") int pn, @PathVariable("size") int size, Model model)
+    @GetMapping(value = {"", "/"}) // ?page=&perPage=, 주의: 다른 메소드가 이런 링크를 가져서는 안됨. 있을 시 주석으로 만들 것.
+    public String listMemberPagination(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                       @RequestParam(value = "perPage", required = false, defaultValue = "10") int perPage,
+                                       @RequestParam(value = "perPagination", required = false, defaultValue = "5") int perPagination,
+                                       @RequestParam(value="type", required = false, defaultValue = "0") String type,
+                                       @RequestParam(value = "keyword", required = false, defaultValue = "" + "@") String keyword,
+                                       Model model) {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(page)
+                .perPage(perPage)
+                .perPagination(perPagination)
+                .type(type)
+                .keyword(keyword)
+                .build();
         PageResultDTO<Member, MemberEntity> resultDTO = memberService.getList(pageRequestDTO);
-        if(resultDTO != null ) {
-            model.addAttribute("list", resultDTO.getDtoList()); // record
+        if(resultDTO != null) {
+            // model.addAttribute("list", resultDTO.getDtoList()); // record
             model.addAttribute("result", resultDTO); // page number list
             return "/members/list"; // view : template engine - thymeleaf .html
         }
@@ -57,6 +71,7 @@ public class MemberController {
         session.invalidate();
         return "redirect:/";
     }
+    /*
     @GetMapping(value = {"", "/"})
     public String listMember(Model model) {
         List<Member> result = null;
@@ -67,6 +82,7 @@ public class MemberController {
         else
             return "/errors/404";
     }
+     */
 
     @GetMapping("/list")
     public String listMember2(Model model) {

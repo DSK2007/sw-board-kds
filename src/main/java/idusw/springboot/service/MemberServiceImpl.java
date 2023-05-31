@@ -109,6 +109,7 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
+
     @Override
     public PageResultDTO<Member, MemberEntity> getList(PageRequestDTO requestDTO) {
         Sort sort = Sort.by("seq").descending();

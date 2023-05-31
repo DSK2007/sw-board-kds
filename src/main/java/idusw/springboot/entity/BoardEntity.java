@@ -9,6 +9,8 @@ import jakarta.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+// @Data // ==  @ToString, @EqualsAndHashCode, @Getter @Setter @RequiredArgsConstructor
+// JPA Auditing 을 활용하여서 생성한사람, 생성일자, 수정한사람, 수정일자 등을 선택하여서 감사
 @Getter
 @ToString(exclude = "writer")
 

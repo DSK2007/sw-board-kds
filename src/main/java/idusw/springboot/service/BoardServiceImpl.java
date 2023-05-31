@@ -1,6 +1,8 @@
 package idusw.springboot.service;
 
 import idusw.springboot.domain.Board;
+import idusw.springboot.domain.PageRequestDTO;
+import idusw.springboot.entity.BoardEntity;
 import idusw.springboot.repository.BoardRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,14 @@ public class BoardServiceImpl implements BoardService{
     }
     @Override
     public int registerBoard(Board board) {
-        return 0;
+        BoardEntity entity = dtoToEntity(board);
+
+        if(boardRepository.save(entity) != null) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 
     @Override
@@ -23,7 +32,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<Board> findBoardAll() {
+    public List<Board> findBoardAll(PageRequestDTO pageRequestDTO) {
         return null;
     }
 

@@ -26,8 +26,7 @@ public class BoardController {
     public String getRegForm(PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request) {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
-        if (member != null)
-        {
+        if (member != null) {
             model.addAttribute("board", Board.builder().build());
             return "/boards/reg-form";
         } else
@@ -38,20 +37,19 @@ public class BoardController {
     public String postBoard(@ModelAttribute("dto") Board dto, Model model, HttpServletRequest request) {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
+        if (member != null) {
         // form에서 hidden으로 전송하는 방식으로 변경
         dto.setWriterSeq(member.getSeq());
         dto.setWriterEmail(member.getEmail());
         dto.setWriterName(member.getName());
 
-        // login 처리하면 그냥 관계 없음
-        /*
-        Long seqLong = Long.valueOf(new Random().nextInt(50));
-        seqLong = (seqLong == 0) ? 1L : seqLong;
-        dto.setWriterSeq(seqLong);
-         */
         Long bno = Long.valueOf(boardService.registerBoard(dto));
 
-        return "redirect:/boards/" + bno; // 등록 후 목록 보기
+        return "redirect:/boards"; // 등록 후 목록 보기
+        } else {
+            return "redirect:/members/login-form";
+        }
+
     }
 
     @GetMapping("")
@@ -64,8 +62,8 @@ public class BoardController {
     public String getBoardByBno(@PathVariable("bno") Long bno, Model model) {
         Board board = boardService.findBoardById(Board.builder().bno(bno).build());
         boardService.updateBoard(board);
-        model.addAttribute("dto", boardService.findBoardById(board));
-        return "/boards/read";
+        model.addAttribute("board", boardService.findBoardById(board));
+        return "/boards/detail";
     }
 
     @GetMapping("/{bno}/up-form")

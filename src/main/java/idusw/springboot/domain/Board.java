@@ -14,15 +14,19 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 
 public class Board {
+    // board
     private Long bno; // 유일성이 있음
-
     private String title;
     private String content;
 
+    // join
     private Long writerSeq;
     private String writerEmail;
     private String writerName;
 
+    // auditing
     private LocalDateTime regDate;
     private LocalDateTime modDate;
+
+    private Long replyCount; // JPA에서 count() 함수로 값을 채움
 }

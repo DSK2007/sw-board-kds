@@ -4,6 +4,7 @@ import idusw.springboot.domain.Board;
 import idusw.springboot.domain.Member;
 import idusw.springboot.domain.PageRequestDTO;
 import idusw.springboot.service.BoardService;
+import idusw.springboot.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ public class BoardController {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
         if (member != null) {
-            model.addAttribute("board", Board.builder().build());
+            model.addAttribute("board", Board.builder().writerSeq(member.getSeq()).writerName(member.getName()).writerEmail(member.getEmail()).build());
             return "/boards/reg-form";
         } else
             return "redirect:/members/login-form"; // 로그인이 안된 상태인 경우
@@ -38,10 +39,10 @@ public class BoardController {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
         if (member != null) {
-        // form에서 hidden으로 전송하는 방식으로 변경
-        dto.setWriterSeq(member.getSeq());
-        dto.setWriterEmail(member.getEmail());
-        dto.setWriterName(member.getName());
+        // form에서 hidden으로 전송하는 방식으로 변경 (했음)
+        // dto.setWriterSeq(member.getSeq());
+        // dto.setWriterEmail(member.getEmail());
+        // dto.setWriterName(member.getName());
 
         Long bno = Long.valueOf(boardService.registerBoard(dto));
 
@@ -67,10 +68,18 @@ public class BoardController {
     }
 
     @GetMapping("/{bno}/up-form")
-    public String getUpForm(@PathVariable("bno") Long seq, Model model) {
-        Board board = boardService.findBoardById(Board.builder().bno(seq).build());
-        model.addAttribute("board", board);
-        return "/boards/upform";
+    public String getUpForm(@PathVariable("bno") Long seq, Model model, HttpServletRequest request) {
+        session = request.getSession();
+        Member member = (Member) session.getAttribute("mb");
+        if (member != null) {
+            Board board = boardService.findBoardById(Board.builder().bno(seq).build());
+            if (member.getSeq().equals(board.getWriterSeq())) {
+                model.addAttribute("board", board);
+                return "/boards/up-form";
+            } else
+                return "redirect:/boards"; // 로그인이 되어있으나 작성자가 아닌 멤버인 경우
+        } else
+            return "redirect:/members/login-form"; // 로그인이 안된 상태인 경우
     }
 
     @PutMapping("/{bno}")
@@ -81,10 +90,18 @@ public class BoardController {
     }
 
     @GetMapping("/{bno}/del-form")
-    public String getDelForm(@PathVariable("bno") Long bno, Model model) {
-        Board board = boardService.findBoardById(Board.builder().bno(bno).build());
-        model.addAttribute("board", board);
-        return "/boards/del-form";
+    public String getDelForm(@PathVariable("bno") Long bno, Model model, HttpServletRequest request) {
+        session = request.getSession();
+        Member member = (Member) session.getAttribute("mb");
+        if (member != null) {
+            Board board = boardService.findBoardById(Board.builder().bno(bno).build());
+            if (member.getSeq().equals(board.getWriterSeq())) {
+                model.addAttribute("board", board);
+                return "/boards/del-form";
+            } else
+                return "redirect:/boards"; // 로그인이 되어있으나 작성자가 아닌 멤버인 경우
+        } else
+            return "redirect:/members/login-form"; // 로그인이 안된 상태인 경우
     }
 
     @DeleteMapping("/{bno}")

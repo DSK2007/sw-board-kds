@@ -6,9 +6,12 @@ import idusw.springboot.domain.PageResultDTO;
 import idusw.springboot.entity.BoardEntity;
 import idusw.springboot.entity.MemberEntity;
 import idusw.springboot.repository.BoardRepository;
+import idusw.springboot.repository.MemberRepository;
 import idusw.springboot.repository.ReplyRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,8 +23,12 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Service
 public class BoardServiceImpl implements BoardService{
-    private BoardRepository boardRepository;
-    private ReplyRepository replyRepository;
+
+    @Autowired
+    public BoardRepository boardRepository;
+    // public BoardServiceImpl(BoardRepository boardRepository) {this.boardRepository = boardRepository;}
+    @Autowired
+    public ReplyRepository replyRepository;
 
     @Override
     public int registerBoard(Board board) {
@@ -54,7 +61,14 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public int updateBoard(Board board) {
-        return 0;
+        BoardEntity entity = dtoToEntity(board);
+
+        if(boardRepository.save(entity) != null) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 
     @Transactional

@@ -4,7 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "sw_board_b202112045")
+@Table(name = "b202112045_board")
 
 @Builder
 @AllArgsConstructor
@@ -17,8 +17,8 @@ import jakarta.persistence.*;
 public class BoardEntity extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sw_board_b202112045_seq_gen")
-    @SequenceGenerator(sequenceName = "sw_board_b202112045_seq", name = "sw_board_b202112045_seq_gen", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "b202112045_board_seq_gen")
+    @SequenceGenerator(sequenceName = "b202112045_board_seq", name = "b202112045_board_seq_gen", allocationSize = 1)
     // Oracle : GenerationType.SEQUENCE, Mysql/MariaDB : GenerationType.IDENTITY, auto_increment
     private Long bno; // 유일키
 

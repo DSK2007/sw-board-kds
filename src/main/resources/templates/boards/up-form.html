@@ -27,7 +27,7 @@
                             <li class="nav-item"><a class="nav-link" href="/members/logout">Logout</a></li>
                         </div>
                         <div th:if="${session.mb != null}">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/boards/reg-form">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/boards/reg-form">Register</a></li>
                         </div>
                     </ul>
                 </div>
@@ -66,13 +66,13 @@
                         <div class="card bg-light">
                             <div class="card-body">
                                 <!-- Comment form-->
-                                <form class="mb-4" th:action="@{'/boards'}" th:object="${board}" th:method="post">
+                                <form class="mb-4" th:action="@{'/boards/' + ${board.bno}}" th:object="${board}" th:method="put">
                                     <input type="hidden" name="writerSeq" th:value="${board.writerSeq}" th:field="*{writerSeq}">
                                     <input type="hidden" name="writerEmail" th:value="${board.writerEmail}" th:field="*{writerEmail}">
                                     <input type="hidden" name="writerName" th:value="${board.writerName}" th:field="*{writerName}">
-                                    <input type="form-control" name="title" th:field="*{title}" placeholder="제목">
-                                    <input type="form-control" name="content" th:field="*{content}" placeholder="내용">
-                                    <input type="submit" value="post" class="btn btn-primary btn-user btn-block">
+                                    <input type="form-control" name="title" th:value="${board.title}" th:field="*{title}" placeholder="제목">
+                                    <input type="form-control" name="content" th:value="${board.content}" th:field="*{content}" placeholder="내용">
+                                    <input type="submit" value="Update" class="btn btn-primary btn-user btn-block">
                                 </form>
                                 <!-- Comment with nested comments-->
                                 <div class="d-flex mb-4">

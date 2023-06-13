@@ -63,6 +63,7 @@
                                                         <select name="type" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
                                                             <option value="e">email</option>
                                                             <option value="n">name</option>
+                                                            <option value="p">phone</option>
                                                             <option value="en">email+name</option>
                                                         </select>
                                                     </label>
@@ -88,9 +89,12 @@
                                                     <th>번호</th>
                                                     <th>이메일</th>
                                                     <th>이름</th>
+                                                    <th>전화번호</th>
                                                     <th>암호</th>
+                                                    <th>차단 여부</th>
                                                     <th>등록일</th>
                                                     <th>수정일</th>
+                                                    <th>정보 수정</th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
@@ -98,9 +102,12 @@
                                                     <th>번호</th>
                                                     <th>이메일</th>
                                                     <th>이름</th>
+                                                    <th>전화번호</th>
                                                     <th>암호</th>
+                                                    <th>차단 여부</th>
                                                     <th>등록일</th>
                                                     <th>수정일</th>
+                                                    <th>정보 수정</th>
                                                 </tr>
                                                 </tfoot>
                                                 <tbody>
@@ -108,9 +115,17 @@
                                                     <td>[[${member.seq}]]</td>
                                                     <td>[[${member.email}]]</td>
                                                     <td>[[${member.name}]]</td>
+                                                    <td>[[${member.phone}]]</td>
                                                     <td>[[${member.pw}]]</td>
+                                                    <td th:text="${member.abandon}? 'O' : 'X'">1</td>
                                                     <td>[[${member.regDate}]]</td>
                                                     <td>[[${member.modDate}]]</td>
+                                                    <td>
+                                                        <a th:href="@{'/members/admin/' + ${member.seq}}" class="btn btn-warning btn-circle btn-sm">
+                                                            <i class="fas fa-exclamation-triangle"></i>
+                                                        </a>
+                                                    </td>
+                                                    </form>
                                                 </tr>
                                                 </tbody>
                                             </table>

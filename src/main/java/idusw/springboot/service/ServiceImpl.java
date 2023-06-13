@@ -19,6 +19,11 @@ public class ServiceImpl implements MemberService{
     }
 
     @Override
+    public Member readByAdmin(Member m) {
+        return null;
+    }
+
+    @Override
     public List<Member> readList() {
         return null;
     }
@@ -36,6 +41,16 @@ public class ServiceImpl implements MemberService{
     @Override
     public Member login(Member m) {
         return null;
+    }
+
+    @Override
+    public int checkEmail(Member m) {
+        return 0;
+    }
+
+    @Override
+    public int checkPhone(Member m) {
+        return 0;
     }
 
     @Override

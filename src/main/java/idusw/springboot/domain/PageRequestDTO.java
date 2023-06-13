@@ -23,8 +23,8 @@ public class PageRequestDTO {
     private String keyword; // 검색어
 
     public PageRequestDTO() {
-        this.page = 1;
-        this.perPage = 10;
+        this.page = 1; // 1
+        this.perPage = 10; // 10
     }
 
     public Pageable getPageable(Sort sort) {

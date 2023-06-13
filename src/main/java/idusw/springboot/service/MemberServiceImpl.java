@@ -32,7 +32,9 @@ public class MemberServiceImpl implements MemberService {
                 .seq(m.getSeq())
                 .email(m.getEmail())
                 .name(m.getName())
+                .phone(m.getPhone())
                 .pw(m.getPw())
+                .abandon(m.getAbandon())
                 .build();
         if(memberRepository.save(entity) != null) // 저장 성공
             return 1;
@@ -47,7 +49,23 @@ public class MemberServiceImpl implements MemberService {
         System.out.println(e);
         result.setSeq(e.getSeq());
         result.setEmail(e.getEmail());
+        result.setPhone(e.getPhone());
         result.setName(e.getName());
+        result.setAbandon(e.getAbandon());
+        return result;
+    }
+
+    @Override
+    public Member readByAdmin(Member m) {
+        MemberEntity e = memberRepository.getById(m.getSeq()); // JpaRepository 구현체의 메소드
+        Member result = new Member(); // DTO (Data Transfer Object) : Controller - Service or Controller - View
+        System.out.println(e);
+        result.setSeq(e.getSeq());
+        result.setEmail(e.getEmail());
+        result.setPhone(e.getPhone());
+        result.setName(e.getName());
+        result.setPw(e.getPw());
+        result.setAbandon(e.getAbandon());
         return result;
     }
 
@@ -62,7 +80,9 @@ public class MemberServiceImpl implements MemberService {
                         .seq(e.getSeq())
                         .email(e.getEmail())
                         .name(e.getName())
+                        .phone(e.getPhone())
                         .pw(e.getPw())
+                        .abandon(e.getAbandon())
                         .regDate(e.getRegDate())
                         .modDate(e.getModDate())
                         .build();
@@ -78,7 +98,9 @@ public class MemberServiceImpl implements MemberService {
                 .seq(m.getSeq())
                 .email(m.getEmail())
                 .name(m.getName())
+                .phone(m.getPhone())
                 .pw(m.getPw())
+                .abandon(m.getAbandon())
                 .build();
         if(memberRepository.save(entity) != null) // 저장 성공
             return 1;
@@ -105,8 +127,28 @@ public class MemberServiceImpl implements MemberService {
             result.setSeq(e.getSeq());
             result.setEmail(e.getEmail());
             result.setName(e.getName());
+            result.setPhone(e.getPhone());
+            result.setAbandon(e.getAbandon());
         }
         return result;
+    }
+
+    @Override
+    public int checkEmail(Member m) {
+        List<MemberEntity> memberEntityList = memberRepository.getMemberEntitiesByEmail(m.getEmail());
+        if(memberEntityList.size() > 0)
+            return 1;
+        else
+            return 0;
+    }
+
+    @Override
+    public int checkPhone(Member m) {
+        List<MemberEntity> memberEntityList = memberRepository.getMemberEntitiesByPhone(m.getPhone());
+        if(memberEntityList.size() > 0)
+            return 1;
+        else
+            return 0;
     }
 
 
@@ -149,6 +191,9 @@ public class MemberServiceImpl implements MemberService {
         }
         if(type.contains("n")) {
             conditionBuilder.or(qMemberEntity.name.contains(keyword));
+        }
+        if(type.contains("p")) {
+            conditionBuilder.or(qMemberEntity.phone.contains(keyword));
         }
         booleanBuilder.and(conditionBuilder);
         return booleanBuilder;

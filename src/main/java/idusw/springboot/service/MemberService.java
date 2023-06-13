@@ -12,11 +12,14 @@ import java.util.List;
 public interface MemberService {
     int create(Member m);
     Member read(Member m);  // mno 값을 넘김
+    Member readByAdmin(Member m); // 전체 정보를 넘김
     List<Member> readList();
     int update(Member m);
     int delete(Member m);
 
     Member login(Member m);
+    int checkEmail(Member m);
+    int checkPhone(Member m);
 
     PageResultDTO<Member, MemberEntity> getList(PageRequestDTO requestDTO);
 
@@ -25,7 +28,9 @@ public interface MemberService {
                 .seq(dto.getSeq())
                 .email(dto.getEmail())
                 .name(dto.getName())
+                .phone(dto.getPhone())
                 .pw(dto.getPw())
+                .abandon(dto.getAbandon())
                 .build();
         return entity;
     }
@@ -35,7 +40,9 @@ public interface MemberService {
                 .seq(entity.getSeq())
                 .email(entity.getEmail())
                 .name(entity.getName())
+                .phone(entity.getPhone())
                 .pw(entity.getPw())
+                .abandon(entity.getAbandon())
                 .regDate(entity.getRegDate())
                 .modDate(entity.getModDate())
                 .build();

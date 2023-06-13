@@ -23,6 +23,8 @@ public class Board {
     private Long writerSeq;
     private String writerEmail;
     private String writerName;
+    private String writerPhone;
+    private int writerAbandon;
 
     // auditing
     private LocalDateTime regDate;

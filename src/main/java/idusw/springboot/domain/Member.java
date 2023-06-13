@@ -17,7 +17,9 @@ public class Member {
     private Long seq;
     private String email;
     private String name;
+    private String phone;
     private String pw;
+    private int abandon;
 
     private LocalDateTime regDate;
     private LocalDateTime modDate;

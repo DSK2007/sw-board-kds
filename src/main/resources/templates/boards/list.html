@@ -19,6 +19,9 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <div th:if="${(session.mb != null) && (session.admin == 1)}">
+                    <li class="nav-item"><a class="nav-link" href="/members">Members</a></li>
+                </div>
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="/boards">Board</a></li>
                 <div th:if="${session.mb == null}">
                     <li class="nav-item"><a class="nav-link" href="/members/login-form">Login</a></li>
@@ -26,8 +29,11 @@
                 <div th:if="${session.mb != null}">
                     <li class="nav-item"><a class="nav-link" href="/members/logout">Logout</a></li>
                 </div>
-                <div th:if="${session.mb != null}">
-                    <li class="nav-item"><a class="nav-link" href="/boards/reg-form">Register</a></li>
+                <div th:if="${session.mb == null}">
+                    <li class="nav-item"><a class="nav-link" href="/members/register-form">Register</a></li>
+                </div>
+                <div th:if="${(session.mb != null) && (session.abandon == 0)}">
+                    <li class="nav-item"><a class="nav-link" href="/boards/reg-form">Post</a></li>
                 </div>
             </ul>
         </div>
@@ -61,7 +67,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <!-- Blog post-->
-                    <div class="card mb-4" th:each="board : ${list.dtoList}">
+                    <div class="card mb-4" th:each="board : ${result.dtoList}">
                         <a th:href="@{'/boards/' + ${board.bno}}"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
                         <div class="card-body">
                             <div class="small text-muted"><span th:text="${board.regDate}" ></span></div>
@@ -78,13 +84,12 @@
             <nav aria-label="Pagination">
                 <hr class="my-0" />
                 <ul class="pagination justify-content-center my-4">
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-                    <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">15</a></li>
-                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                    <li th:if="${result.prev}" th:class="'page-item ' + ${result.prev?'':'disabled'}">
+                        <a class="page-link" href="#" th:href="@{/boards(page=${result.start - 1}, perPage=${result.perPage})}">Newer</a></li>
+                    <li th:class="'page-item ' + ${result.curPage == page?'active':''}" th:each="page : ${result.pageList}">
+                        <a class="page-link" href="#" th:href="@{/boards(page=${page}, perPage=${result.perPage})}">[[${page}]]</a></li>
+                    <li th:if="${result.next}" th:class="'page-item ' + ${result.next?'':'disabled'} ">
+                        <a class="page-link" href="#" th:href="@{/boards(page=${result.end + 1}, perPage=${result.perPage})}">Older</a></li>
                 </ul>
             </nav>
         </div>
@@ -102,7 +107,7 @@
                                 <option value="c">content</option>
                                 <option value="w">writer</option>
                             </select>
-                            <input class="form-control" type="text" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search">
+                            <input class="form-control" type="text" name="keyword" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search">
                             <button class="btn btn-primary" type="button" id="button-search" onclick="document.getElementById('search-form').submit();">Go!</button>
                         </div>
                     </div>

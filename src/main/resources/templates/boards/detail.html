@@ -20,6 +20,9 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <div th:if="${(session.mb != null) && (session.admin == 1)}">
+                    <li class="nav-item"><a class="nav-link" href="/members">Members</a></li>
+                </div>
                 <li class="nav-item"><a class="nav-link" href="/boards">Board</a></li>
                 <div th:if="${session.mb == null}">
                     <li class="nav-item"><a class="nav-link" href="/members/login-form">Login</a></li>
@@ -27,8 +30,11 @@
                 <div th:if="${session.mb != null}">
                     <li class="nav-item"><a class="nav-link" href="/members/logout">Logout</a></li>
                 </div>
-                <div th:if="${session.mb != null}">
-                <li class="nav-item"><a class="nav-link" href="/boards/reg-form">Register</a></li>
+                <div th:if="${session.mb == null}">
+                    <li class="nav-item"><a class="nav-link" href="/members/register-form">Register</a></li>
+                </div>
+                <div th:if="${(session.mb != null) && (session.abandon == 0)}">
+                    <li class="nav-item"><a class="nav-link" href="/boards/reg-form">Post</a></li>
                 </div>
             </ul>
         </div>
@@ -49,7 +55,7 @@
                     <!-- Post categories-->
                     <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
                     <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
-                    <div th:if="${(session.mb != null) && (session.mb.getSeq() == board.writerSeq)}">
+                    <div th:if="${(session.mb != null) && (session.mb.getSeq() == board.writerSeq) && (session.abandon == 0)}">
                     <a class="badge bg-secondary text-decoration-none link-light" th:href="@{'/boards/' + ${board.bno} + '/up-form'}">Edit Post</a>
                     <a class="badge bg-secondary text-decoration-none link-light" th:href="@{'/boards/' + ${board.bno} + '/del-form'}">Delete Post</a>
                     </div>

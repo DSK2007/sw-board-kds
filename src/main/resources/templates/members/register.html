@@ -30,14 +30,77 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
+                            <script>
+                                function checkEmail() {
+                                    var email = $('#exampleInputEmail').val();
+                                    $.ajax({
+                                        url:'/members/check-email',
+                                        type:'post',
+                                        data:{email:email},
+                                        success:function(cnt){
+                                            if(cnt == 0){
+                                                $('.email_ok').css("display", "inline-block");
+                                                $('.email_already').css("display", "none");
+                                                document.querySelector('#formSubmit').disabled = false;
+                                            } else {
+                                                $('.email_already').css("display", "inline-block");
+                                                $('.email_ok').css("display", "none");
+                                                document.querySelector('#formSubmit').disabled = true;
+                                            }
+                                        },
+                                        error:function(){
+                                            alert("에러입니다");
+                                        }
+                                    });
+                                };
+
+                                function checkPhone() {
+                                    var phone = $('#exampleInputPhone').val();
+                                    $.ajax({
+                                        url:'/members/check-phone',
+                                        type:'post',
+                                        data:{phone:phone},
+                                        success:function(cnt){
+                                            if(cnt == 0){
+                                                $('.phone_ok').css("display", "inline-block");
+                                                $('.phone_already').css("display", "none");
+                                                document.querySelector('#formSubmit').disabled = false;
+                                            } else {
+                                                $('.phone_already').css("display", "inline-block");
+                                                $('.phone_ok').css("display", "none");
+                                                document.querySelector('#formSubmit').disabled = true;
+                                            }
+                                        },
+                                        error:function(){
+                                            alert("에러입니다");
+                                        }
+                                    });
+                                };
+                            </script>
                             <form class="user" th:action="@{'/members/register'}" th:object="${member}" th:method="post">
                                 <div class="form-group row">
-                                    <input type="text" name="name" th:field="*{name}" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder=" Name">
-                                </div>
-                                <div class="form-group">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
                                     <input type="email" name="email" th:field="*{email}" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address">
+                                        placeholder="Email Address" oninput="checkEmail()">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span class="email_ok">ok: 사용 가능한 이메일</span>
+                                        <span class="email_already">already: 중복이라 사용 불가능한 이메일</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <input type="text" name="name" th:field="*{name}" class="form-control form-control-user" id="exampleFirstName"
+                                           placeholder=" Name">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="text" name="phone" th:field="*{phone}" class="form-control form-control-user" id="exampleInputPhone"
+                                               placeholder="Phone Number" oninput="checkPhone()">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span class="phone_ok">ok: 사용 가능한 전화 번호</span>
+                                        <span class="phone_already">already: 중복이라 사용 불가능한 전화 번호</span>
+                                    </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -49,7 +112,8 @@
                                             id="exampleRepeatPassword" placeholder="Repeat Password">
                                     </div>
                                 </div>
-                                <input type="submit" value="Register Account" class="btn btn-primary btn-user btn-block">
+                                <input type="hidden" name="abandon" th:value="*{0}" th:field="*{abandon}">
+                                <input type="submit" value="Register Account" class="btn btn-primary btn-user btn-block" id="formSubmit" name="formSubmit">
                                 <hr>
                                 <a href="../main/index.html" class="btn btn-google btn-user btn-block">
                                     <i class="fab fa-google fa-fw"></i> Register with Google

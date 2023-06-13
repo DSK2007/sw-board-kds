@@ -19,6 +19,9 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <div th:if="${(session.mb != null) && (session.admin == 1)}">
+                            <li class="nav-item"><a class="nav-link" href="/members">Members</a></li>
+                        </div>
                         <li class="nav-item"><a class="nav-link" href="/boards">Board</a></li>
                         <div th:if="${session.mb == null}">
                             <li class="nav-item"><a class="nav-link" href="/members/login-form">Login</a></li>
@@ -26,8 +29,11 @@
                         <div th:if="${session.mb != null}">
                             <li class="nav-item"><a class="nav-link" href="/members/logout">Logout</a></li>
                         </div>
-                        <div th:if="${session.mb != null}">
-                        <li class="nav-item"><a class="nav-link" href="/boards/reg-form">Register</a></li>
+                        <div th:if="${session.mb == null}">
+                            <li class="nav-item"><a class="nav-link" href="/members/register-form">Register</a></li>
+                        </div>
+                        <div th:if="${(session.mb != null) && (session.abandon == 0)}">
+                            <li class="nav-item"><a class="nav-link" href="/boards/reg-form">Post</a></li>
                         </div>
                     </ul>
                 </div>
@@ -70,6 +76,8 @@
                                     <input type="hidden" name="writerSeq" th:value="${board.writerSeq}" th:field="*{writerSeq}">
                                     <input type="hidden" name="writerEmail" th:value="${board.writerEmail}" th:field="*{writerEmail}">
                                     <input type="hidden" name="writerName" th:value="${board.writerName}" th:field="*{writerName}">
+                                    <input type="hidden" name="writerPhone" th:value="${board.writerPhone}" th:field="*{writerPhone}">
+                                    <input type="hidden" name="writerAbandon" th:value="${board.writerAbandon}" th:field="*{writerAbandon}">
                                     <input type="form-control" name="title" th:value="${board.title}" th:field="*{title}" placeholder="제목">
                                     <input type="form-control" name="content" th:value="${board.content}" th:field="*{content}" placeholder="내용">
                                     <input type="submit" value="Update" class="btn btn-primary btn-user btn-block">

@@ -20,11 +20,17 @@ public class MemberEntity extends BaseEntity {
     // Oracle : GenerationType.SEQUENCE, Mysql : GenerationType.IDENTITY
     private Long seq;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 50, nullable = false)
     private String email;
 
     @Column(length = 30, nullable = false)
     private String name;
+
+    @Column(length = 20, nullable = false)
+    private String phone;
+
+    @Column(nullable = false)
+    private int abandon;
 
     @Column(length = 20, nullable = false)
     private String pw;

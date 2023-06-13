@@ -38,6 +38,7 @@ public interface BoardService {
                 .writerSeq(memberEntity.getSeq())
                 .writerEmail(memberEntity.getEmail())
                 .writerName(memberEntity.getName())
+                .writerPhone(memberEntity.getPhone())
                 .modDate(entity.getModDate())
                 .regDate(entity.getRegDate())
                 .replyCount(replyCount)

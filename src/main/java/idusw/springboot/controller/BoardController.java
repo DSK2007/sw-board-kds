@@ -3,6 +3,9 @@ package idusw.springboot.controller;
 import idusw.springboot.domain.Board;
 import idusw.springboot.domain.Member;
 import idusw.springboot.domain.PageRequestDTO;
+import idusw.springboot.domain.PageResultDTO;
+import idusw.springboot.entity.BoardEntity;
+import idusw.springboot.entity.MemberEntity;
 import idusw.springboot.service.BoardService;
 import idusw.springboot.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +31,11 @@ public class BoardController {
         session = request.getSession();
         Member member = (Member) session.getAttribute("mb");
         if (member != null) {
-            model.addAttribute("board", Board.builder().writerSeq(member.getSeq()).writerName(member.getName()).writerEmail(member.getEmail()).build());
-            return "/boards/reg-form";
+            if (session.getAttribute("abandon").equals(0)) {
+                model.addAttribute("board", Board.builder().writerSeq(member.getSeq()).writerName(member.getName()).writerEmail(member.getEmail()).build());
+                return "/boards/reg-form";
+            } else
+                return "redirect:/boards"; // 차단된 멤버인 경우
         } else
             return "redirect:/members/login-form"; // 로그인이 안된 상태인 경우
     }
@@ -52,11 +58,36 @@ public class BoardController {
         }
 
     }
-
+/*
     @GetMapping("")
     public String getBoards(PageRequestDTO pageRequestDTO, Model model) { // 중간 본 수정
         model.addAttribute("list", boardService.findBoardAll(pageRequestDTO));
         return "/boards/list";
+    }
+*/
+
+    @GetMapping(value = {"", "/"})
+    public String getBoards(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                            @RequestParam(value = "per-Page", required = false, defaultValue = "8") int perPage,
+                            @RequestParam(value = "per-Pagination", required = false, defaultValue = "5") int perPagination,
+                            @RequestParam(value = "type", required = false, defaultValue = "0") String type,
+                            @RequestParam(value = "keyword", required = false, defaultValue = "" + "@") String keyword,
+                            Model model) { // 중간 본 수정
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(page)
+                .perPage(perPage)
+                .perPagination(perPagination)
+                .type(type)
+                .keyword(keyword)
+                .build();
+        PageResultDTO<Board, Object[]> resultDTO = boardService.findBoardAll(pageRequestDTO);
+        if(resultDTO != null) {
+            // model.addAttribute("list", boardService.findBoardAll(pageRequestDTO));
+            model.addAttribute("result", resultDTO);
+            return "/boards/list";
+        }
+        else
+            return "/errors/404";
     }
 
     @GetMapping("/{bno}")
@@ -74,8 +105,11 @@ public class BoardController {
         if (member != null) {
             Board board = boardService.findBoardById(Board.builder().bno(seq).build());
             if (member.getSeq().equals(board.getWriterSeq())) {
-                model.addAttribute("board", board);
-                return "/boards/up-form";
+                if (session.getAttribute("abandon").equals(0)) {
+                    model.addAttribute("board", board);
+                    return "/boards/up-form";
+                } else
+                    return "redirect:/boards"; // 차단된 멤버인 경우
             } else
                 return "redirect:/boards"; // 로그인이 되어있으나 작성자가 아닌 멤버인 경우
         } else
@@ -96,8 +130,11 @@ public class BoardController {
         if (member != null) {
             Board board = boardService.findBoardById(Board.builder().bno(bno).build());
             if (member.getSeq().equals(board.getWriterSeq())) {
-                model.addAttribute("board", board);
-                return "/boards/del-form";
+                if (session.getAttribute("abandon").equals(0)) {
+                    model.addAttribute("board", board);
+                    return "/boards/del-form";
+                } else
+                    return "redirect:/boards"; // 차단된 멤버인 경우
             } else
                 return "redirect:/boards"; // 로그인이 되어있으나 작성자가 아닌 멤버인 경우
         } else
